@@ -1,0 +1,200 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: microservices-identityserver
+spec:
+  type: NodePort
+  ports:
+  - name: identityserver
+    protocol: TCP
+    port: 80
+    nodePort: 30101
+  selector:
+    app: microservices-identityserver
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: microservices-identityserver
+spec:
+  replicas: 1
+  minReadySeconds: 10
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: microservices-identityserver
+    spec:
+      containers:
+      - name: microservices-identityserver
+        image: ezstoremicroservices/microservices.identityserver
+        ports:
+        - containerPort: 80
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: "k8s"
+        command: ["/bin/bash"]
+        args: ["-c", "dotnet /app/Microservices.IdentityServer.dll"]
+---
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: microservices-logging-api
+spec:
+  type: NodePort
+  ports:
+  - name: logging-api
+    protocol: TCP
+    port: 80
+    nodePort: 30102
+  selector:
+    app: microservices-logging-api
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: microservices-logging-api
+spec:
+  replicas: 1
+  minReadySeconds: 10
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: microservices-logging-api
+    spec:
+      containers:
+      - name: microservices-logging-api
+        image: ezstoremicroservices/microservices.logging.api
+        ports:
+        - containerPort: 80
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: "k8s"
+        command: ["/bin/bash"]
+        args: ["-c", "dotnet /app/Microservices.Logging.API.dll"]
+---
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: microservices-setting-api
+spec:
+  type: NodePort
+  ports:
+  - name: setting-api
+    protocol: TCP
+    port: 80
+    nodePort: 30103
+  selector:
+    app: microservices-setting-api
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: microservices-setting-api
+spec:
+  replicas: 1
+  minReadySeconds: 10
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: microservices-setting-api
+    spec:
+      containers:
+      - name: microservices-setting-api
+        image: ezstoremicroservices/microservices.setting.api
+        ports:
+        - containerPort: 80
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: "k8s"
+        command: ["/bin/bash"]
+        args: ["-c", "dotnet /app/Microservices.Setting.API.dll"]
+---
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: microservices-logging-background
+spec:
+  type: ClusterIP
+  ports:
+  - name: logging-background
+    protocol: TCP
+    port: 80
+  selector:
+    app: microservices-logging-background
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: microservices-logging-background
+spec:
+  replicas: 2
+  minReadySeconds: 10
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: microservices-logging-background
+    spec:
+      containers:
+      - name: microservices-logging-background
+        image: ezstoremicroservices/microservices.logging.background
+        ports:
+        - containerPort: 80
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: "k8s"
+        command: ["/bin/bash"]
+        args: ["-c", "dotnet /app/Microservices.Logging.BackgroundProcess.dll"]
+---
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: microservices-notification-background
+spec:
+  type: ClusterIP
+  ports:
+  - name: logging-api
+    protocol: TCP
+    port: 80
+  selector:
+    app: microservices-notification-background
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: microservices-notification-background
+spec:
+  replicas: 2
+  minReadySeconds: 10
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: microservices-notification-background
+    spec:
+      containers:
+      - name: microservices-notification-background
+        image: ezstoremicroservices/microservices.notification.background
+        ports:
+        - containerPort: 80
+        env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: "k8s"
+        command: ["/bin/bash"]
+        args: ["-c", "dotnet /app/Microservices.Notification.BackgroundProcess.dll"]
+      dnsConfig:
+        nameservers:
+        - 8.8.8.8
+---

@@ -49,7 +49,6 @@ namespace Microservices.IdentityServer
 
             // Add application services.
             services.AddScoped(i => new MongoDbContext(configuration.GetConnectionString(MicroservicesConstants.MemberDbConnection), configuration.GetConnectionString(MicroservicesConstants.MemberDbName), false));
-            services.AddTransient<IDataAccessService>(i => new DataAccessWriteService(i.GetService<MongoDbContext>()));
             services.AddTransient<IDataAccessWriteService>(i => new DataAccessWriteService(i.GetService<MongoDbContext>()));
 
             Member.ApplicationCore.HandlerRegister.Register(services);

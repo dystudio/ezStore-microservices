@@ -50,7 +50,6 @@ namespace ezStore.WareHouse.API
             services.AddScoped<IMessageBus, MessageBus>();
 
             // Add application services.
-            services.AddTransient<IDataAccessService>(i => new DataAccessWriteService(i.GetService<WareHouseDbContext>()));
             // todo: IDataAccessWriteService & IDataAccessReadOnlyService should not use the same dbcontext
             services.AddTransient<IDataAccessWriteService>(i => new DataAccessWriteService(i.GetService<WareHouseDbContext>()));
             services.AddTransient<IDataAccessReadOnlyService>(i => new DataAccessReadOnlyService(i.GetService<WareHouseDbContext>()));

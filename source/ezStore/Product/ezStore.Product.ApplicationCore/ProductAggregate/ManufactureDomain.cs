@@ -10,7 +10,7 @@ namespace ezStore.Product.ApplicationCore.ProductAggregate
 {
     public class ManufactureDomain : AggregateRoot
     {
-        public ManufactureDomain(IDataAccessService dataAccessService) : base(dataAccessService)
+        public ManufactureDomain(IDataAccessWriteService dataAccessService) : base(dataAccessService)
         {
         }
 
@@ -23,9 +23,9 @@ namespace ezStore.Product.ApplicationCore.ProductAggregate
 
         public void Update(ManufactureDto manufacture)
         {
-            var Manufacture2Save = _dataAccessService.Repository<Manufacture>().Get(i => i.Id == manufacture.Id).FirstOrDefault();
-            Manufacture2Save.Name = manufacture.Name;
-            Manufacture2Save.UpdatedDate = DateTime.Now;
+            var manufacture2Save = _dataAccessService.Repository<Manufacture>().Get(i => i.Id == manufacture.Id).FirstOrDefault();
+            manufacture2Save.Name = manufacture.Name;
+            manufacture2Save.UpdatedDate = DateTime.Now;
         }
 
         public void Delete(Guid id)

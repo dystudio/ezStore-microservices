@@ -50,7 +50,6 @@ namespace Microservices.Setting.API
 
             // Add application services.
             services.AddScoped(i => new MongoDbContext(configuration.GetConnectionString(MicroservicesConstants.SettingDbConnection), configuration.GetConnectionString(MicroservicesConstants.SettingDbName), false));
-            services.AddTransient<IDataAccessService>(i => new DataAccessWriteService(i.GetService<MongoDbContext>()));
             services.AddTransient<IDataAccessWriteService>(i => new DataAccessWriteService(i.GetService<MongoDbContext>()));
             services.AddTransient<IDataAccessReadOnlyService>(i => new ReadOnlyService(i.GetService<MongoDbContext>()));
 

@@ -1,24 +1,102 @@
 {
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build",
-            "command": "dotnet",
-            "type": "process",
-            "args": [
-                "build",
-                "${workspaceFolder}/ezStoreMicroservice.sln"
+            "label": "Run CoreServices",
+            "dependsOn": [
+                "Run Microservices.FileSystem.API",
+                "Run Microservices.Logging.API",
+                "Run Microservices.IdentityServer",
+                "Run Microservices.Notification.BackgroundProcess",
+                "Run Microservices.Setting.API"
             ],
-            "problemMatcher": "$msCompile"
+            "problemMatcher": []
         },
         {
-            "label": "publish",
-            "command": "dotnet",
-            "args": [
-                "publish",
-                "${workspaceRoot}/ezStoreMicroservice.sln"
+            "label": "Run ezStore",
+            "dependsOn": [
+                "Run ezStore.Order.API",
+                "Run ezStore.Payment.API",
+                "Run ezStore.Product.API",
+                "Run ezStore.WareHouse.API"
             ],
-            "problemMatcher": "$msCompile"
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Microservices.FileSystem.API",
+            "command": "dotnet run --project CoreServices/FileSystem/Microservices.FileSystem.API/Microservices.FileSystem.API.csproj",
+            "type": "shell",
+            "presentation": {
+                "reveal": "always"
+            }
+        },
+        {
+            "label": "Run Microservices.Logging.API",
+            "command": "dotnet run --project CoreServices/Logging/Microservices.Logging.API/Microservices.Logging.API.csproj",
+            "type": "shell",
+            "presentation": {
+                "reveal": "always"
+            }
+        },
+        {
+            "label": "Run Microservices.IdentityServer",
+            "command": "dotnet run --project CoreServices/Member/Microservices.IdentityServer/Microservices.IdentityServer.csproj",
+            "type": "shell",
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Microservices.Notification.BackgroundProcess",
+            "command": "dotnet run --project CoreServices/Notification/Microservices.Notification.BackgroundProcess/Microservices.Notification.BackgroundProcess.csproj",
+            "type": "shell",
+            "presentation": {
+                "reveal": "always"
+            }
+        },
+        {
+            "label": "Run Microservices.Setting.API",
+            "command": "dotnet run --project CoreServices/Setting/Microservices.Setting.API/Microservices.Setting.API.csproj",
+            "type": "shell",
+            "presentation": {
+                "reveal": "always"
+            }
+        },
+        {
+            "label": "Run ezStore.Order.API",
+            "command": "dotnet run --project ezStore/Order/ezStore.Order.API/ezStore.Order.API.csproj",
+            "type": "shell",
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run ezStore.Payment.API",
+            "command": "dotnet run --project ezStore/Payment/ezStore.Payment.API/ezStore.Payment.API.csproj",
+            "type": "shell",
+            "presentation": {
+                "reveal": "always"
+            }
+        },
+        {
+            "label": "Run ezStore.Product.API",
+            "command": "dotnet run --project ezStore/Product/ezStore.Product.API/ezStore.Product.API.csproj",
+            "type": "shell",
+            "presentation": {
+                "reveal": "always"
+            }
+        },
+        {
+            "label": "Run ezStore.WareHouse.API",
+            "command": "dotnet run --project ezStore/WareHouse/ezStore.WareHouse.API/ezStore.WareHouse.API.csproj",
+            "type": "shell",
+            "presentation": {
+                "reveal": "always"
+            }
         }
     ]
 }

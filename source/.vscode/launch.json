@@ -5,33 +5,39 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": ".NET Core Launch Docker ezStore.Microservice.Product.API",
+            "name": ".NET Core Attach",
             "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "publish",
-            "program": "/app/ezStore.Microservice.Product.API.dll",
-            "sourceFileMap": {
-                "/app": "${workspaceRoot}/"
-            },
-            "args": [],
-            "cwd": "/app",
-            "pipeTransport": {
-                "debuggerPath": "/vsdbg/vsdbg",
-                "pipeProgram": "/bin/bash",
-                "pipeCwd": "${workspaceRoot}",
-                "pipeArgs": [
-                    "-c",
-                    "docker exec -i ezstore.product.api /vsdbg/vsdbg --interpreter=vscode"
-                ],
-                "windows": {
-                    "pipeProgram": "${env:windir}\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
-                    "pipeCwd": "${workspaceRoot}",
-                    "pipeArgs": [
-                        "-c",
-                        "docker exec -i ezstore.product.api ${debuggerCommand}"
-                    ]
-                }
-            }
-        }
+            "request": "attach",
+            "processId": "${command:pickProcess}"
+        },
+        // {
+        //     "name": ".NET Core Launch Docker ezStore.Microservice.Product.API",
+        //     "type": "coreclr",
+        //     "request": "launch",
+        //     "preLaunchTask": "publish",
+        //     "program": "/app/ezStore.Microservice.Product.API.dll",
+        //     "sourceFileMap": {
+        //         "/app": "${workspaceRoot}/"
+        //     },
+        //     "args": [],
+        //     "cwd": "/app",
+        //     "pipeTransport": {
+        //         "debuggerPath": "/vsdbg/vsdbg",
+        //         "pipeProgram": "/bin/bash",
+        //         "pipeCwd": "${workspaceRoot}",
+        //         "pipeArgs": [
+        //             "-c",
+        //             "docker exec -i ezstore.product.api /vsdbg/vsdbg --interpreter=vscode"
+        //         ],
+        //         "windows": {
+        //             "pipeProgram": "${env:windir}\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+        //             "pipeCwd": "${workspaceRoot}",
+        //             "pipeArgs": [
+        //                 "-c",
+        //                 "docker exec -i ezstore.product.api ${debuggerCommand}"
+        //             ]
+        //         }
+        //     }
+        // }
     ]
 }

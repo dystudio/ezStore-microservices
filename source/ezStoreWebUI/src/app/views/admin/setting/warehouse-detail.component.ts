@@ -31,4 +31,6 @@ export class WarehouseDetailComponent implements OnInit {
     // }
     // this.loading = false;
   }
+
+  back() { }
 }

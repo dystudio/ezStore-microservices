@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.168
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ws4vn.Microservices.ApplicationCore", "Microservices.ApplicationCore\Ws4vn.Microservices.ApplicationCore.csproj", "{419EB350-BE5D-414C-A1C4-CDFC19362853}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ws4vn.Microservices.Infrastructure", "Microservices.Infrastructure\Ws4vn.Microservices.Infrastructure.csproj", "{7DE446B6-09BE-4ABB-8042-CDC867C1EF50}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ws4vn.Microservices.Infrastructure.Caching", "Microservices.Infrastructure.Caching\Ws4vn.Microservices.Infrastructure.Caching.csproj", "{829ED279-675C-42E3-A788-723AC37D27EB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ws4vn.Microservices.Infrastructure.MongoDB", "Microservices.Infrastructure.MongoDB\Ws4vn.Microservices.Infrastructure.MongoDB.csproj", "{4CD3ADD7-1B22-4A81-A450-1DAB4A6EAD4B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ws4vn.Microservices.Infrastructure.RabbitMQ", "Microservices.Infrastructure.RabbitMQ\Ws4vn.Microservices.Infrastructure.RabbitMQ.csproj", "{4A47AB2E-8110-464C-A52B-C0D62AFEC1FE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ws4vn.Microservices.Infrastructure.Sql", "Microservices.Infrastructure.Sql\Ws4vn.Microservices.Infrastructure.Sql.csproj", "{D3836A96-F431-44EE-9028-439BE0CBF704}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{419EB350-BE5D-414C-A1C4-CDFC19362853}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{419EB350-BE5D-414C-A1C4-CDFC19362853}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{419EB350-BE5D-414C-A1C4-CDFC19362853}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{419EB350-BE5D-414C-A1C4-CDFC19362853}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DE446B6-09BE-4ABB-8042-CDC867C1EF50}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{7DE446B6-09BE-4ABB-8042-CDC867C1EF50}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{7DE446B6-09BE-4ABB-8042-CDC867C1EF50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DE446B6-09BE-4ABB-8042-CDC867C1EF50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{829ED279-675C-42E3-A788-723AC37D27EB}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{829ED279-675C-42E3-A788-723AC37D27EB}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{829ED279-675C-42E3-A788-723AC37D27EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{829ED279-675C-42E3-A788-723AC37D27EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CD3ADD7-1B22-4A81-A450-1DAB4A6EAD4B}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{4CD3ADD7-1B22-4A81-A450-1DAB4A6EAD4B}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{4CD3ADD7-1B22-4A81-A450-1DAB4A6EAD4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CD3ADD7-1B22-4A81-A450-1DAB4A6EAD4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A47AB2E-8110-464C-A52B-C0D62AFEC1FE}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{4A47AB2E-8110-464C-A52B-C0D62AFEC1FE}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{4A47AB2E-8110-464C-A52B-C0D62AFEC1FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A47AB2E-8110-464C-A52B-C0D62AFEC1FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3836A96-F431-44EE-9028-439BE0CBF704}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{D3836A96-F431-44EE-9028-439BE0CBF704}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{D3836A96-F431-44EE-9028-439BE0CBF704}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3836A96-F431-44EE-9028-439BE0CBF704}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E97B739D-FDB3-48E4-8945-BFBACC720F76}
+	EndGlobalSection
+EndGlobal

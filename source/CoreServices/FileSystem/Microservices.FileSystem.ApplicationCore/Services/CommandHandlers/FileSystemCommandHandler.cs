@@ -8,25 +8,25 @@ namespace Microservices.FileSystem.ApplicationCore.Services.CommandHandlers
 {
     public class FileSystemCommandHandler : ICommandHandler<UploadFilesCommand>
     {
-        private readonly IDataAccessWriteService _writeService;
+        private readonly IDomainService _domainService;
         private readonly IFSRepository _fsService;
 
-        public FileSystemCommandHandler(IFSRepository fsService, IDataAccessWriteService writeService)
+        public FileSystemCommandHandler(IFSRepository fsService, IDomainService domainService)
         {
-            _writeService = writeService;
+            _domainService = domainService;
             _fsService = fsService;
         }
 
-        public Task ExecuteAsync(UploadFilesCommand command)
+        public async Task ExecuteAsync(UploadFilesCommand command)
         {
             foreach (var item in command.FileMetadatas)
             {
                 var id = _fsService.UploadFile(item.Name, item.Data).Result;
-                _writeService.Repository<FileMetadata>().Insert(new FileMetadata { Name = item.Name, FileSystemId = id });
-                _writeService.SaveChanges();
+                await Task.Run(() =>
+                {
+                    _domainService.WriteService.Repository<FileMetadata>().Insert(new FileMetadata { Name = item.Name, FileSystemId = id });
+                });
             }
-
-            return Task.CompletedTask;
         }
     }
 }

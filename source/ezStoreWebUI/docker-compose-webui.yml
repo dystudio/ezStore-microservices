@@ -1,0 +1,18 @@
+version: '3.5'
+
+networks:
+  microservices-network:
+    name: microservices-network
+    driver: bridge
+
+services:
+  ezStore.webui:
+    image: ezstore.webui
+    container_name: ezstore-webui
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - 8001:80
+    networks:
+      - microservices-network

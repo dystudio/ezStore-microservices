@@ -4,14 +4,17 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <Authors>Khai Nguyen (khainx127@gmail.com)</Authors>
     <Product>Microservices</Product>
-    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Ws4vn.Microservices.ApplicationCore" Version="1.0.3" />
-    <PackageReference Include="Ws4vn.Microservices.Infrastructure.RabbitMQ" Version="1.0.3" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\ws4vn-microservices-library\Microservices.ApplicationCore\Ws4vn.Microservices.ApplicationCore.csproj" />
+    <ProjectReference Include="..\..\..\ws4vn-microservices-library\Microservices.Infrastructure.RabbitMQ\Ws4vn.Microservices.Infrastructure.RabbitMQ.csproj" />    
+  </ItemGroup>
+
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>

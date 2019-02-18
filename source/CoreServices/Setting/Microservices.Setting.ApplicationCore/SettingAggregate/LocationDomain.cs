@@ -8,7 +8,7 @@ namespace Microservices.Setting.ApplicationCore.SettingAggregate
 {
     public class LocationDomain : AggregateRoot
     {
-        public LocationDomain(IDataAccessService dataAccessService) : base(dataAccessService)
+        public LocationDomain(IDataAccessWriteService dataAccessService) : base(dataAccessService)
         {
         }
 

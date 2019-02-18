@@ -11,7 +11,7 @@ namespace ezStore.Product.ApplicationCore.ProductAggregate
 {
     public class ProductCategoryDomain : AggregateRoot
     {
-        public ProductCategoryDomain(IDataAccessService dataAccessService) : base(dataAccessService)
+        public ProductCategoryDomain(IDataAccessWriteService dataAccessService) : base(dataAccessService)
         {
         }
 

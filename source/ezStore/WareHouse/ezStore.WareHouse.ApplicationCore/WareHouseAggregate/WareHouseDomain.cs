@@ -8,7 +8,7 @@ namespace ezStore.WareHouse.ApplicationCore.WareHouseAggregate
 {
     public class WareHouseDomain : AggregateRoot
     {
-        public WareHouseDomain(IDataAccessService dataAccessService) : base(dataAccessService)
+        public WareHouseDomain(IDataAccessWriteService dataAccessService) : base(dataAccessService)
         {
         }
 

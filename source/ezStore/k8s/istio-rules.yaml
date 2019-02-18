@@ -1,0 +1,80 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+ name: "microservices-identity-db"
+spec:
+ host: "microservices-identity-db.default.svc.cluster.local"
+ trafficPolicy:
+   tls:
+     mode: DISABLE
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+ name: "microservices-services-queue"
+spec:
+ host: "microservices-services-queue.default.svc.cluster.local"
+ trafficPolicy:
+   tls:
+     mode: DISABLE
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+ name: "microservices-services-db"
+spec:
+ host: "microservices-services-db.default.svc.cluster.local"
+ trafficPolicy:
+   tls:
+     mode: DISABLE
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+ name: "microservices-settings-db"
+spec:
+ host: "microservices-settings-db.default.svc.cluster.local"
+ trafficPolicy:
+   tls:
+     mode: DISABLE
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+ name: "ezstore-order-db"
+spec:
+ host: "ezstore-order-db.default.svc.cluster.local"
+ trafficPolicy:
+   tls:
+     mode: DISABLE
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+ name: "ezstore-payment-db"
+spec:
+ host: "ezstore-payment-db.default.svc.cluster.local"
+ trafficPolicy:
+   tls:
+     mode: DISABLE
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+ name: "ezstore-product-db"
+spec:
+ host: "ezstore-product-db.default.svc.cluster.local"
+ trafficPolicy:
+   tls:
+     mode: DISABLE
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+ name: "ezstore-warehouse-db"
+spec:
+ host: "ezstore-warehouse-db.default.svc.cluster.local"
+ trafficPolicy:
+   tls:
+     mode: DISABLE
+---

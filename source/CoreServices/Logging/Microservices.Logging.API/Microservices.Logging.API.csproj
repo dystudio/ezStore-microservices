@@ -4,7 +4,6 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <Authors>Khai Nguyen (khainx127@gmail.com)</Authors>
     <Product>Microservices</Product>
-    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,7 +12,6 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="4.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUi" Version="4.0.1" />
     <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.3.0" />
-    <PackageReference Include="Ws4vn.Microservices.Infrastructure.MongoDB" Version="1.0.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Microservices.Logging.ApplicationCore\Microservices.Logging.ApplicationCore.csproj" />
+    <ProjectReference Include="..\..\..\ws4vn-microservices-library\Microservices.Infrastructure.MongoDB\Ws4vn.Microservices.Infrastructure.MongoDB.csproj" />
   </ItemGroup>
 
   <ItemGroup>

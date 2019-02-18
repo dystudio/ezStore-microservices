@@ -6,7 +6,7 @@ namespace Microservices.Member.Domain.MemberAggregate
 {
     public class UserDomain : AggregateRoot
     {
-        public UserDomain(IDataAccessService dataAccessService) : base(dataAccessService)
+        public UserDomain(IDataAccessWriteService dataAccessService) : base(dataAccessService)
         {
         }
 

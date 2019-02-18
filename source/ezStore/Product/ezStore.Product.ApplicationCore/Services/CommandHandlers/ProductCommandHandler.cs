@@ -6,49 +6,44 @@ using Ws4vn.Microservices.ApplicationCore.Interfaces;
 
 namespace ezStore.Product.ApplicationCore.Services.CommandHandlers
 {
-    public class ProductCommandHandler
-        : ICommandHandler<CreateProductCommand>
+    public class ProductCommandHandler : ICommandHandler<CreateProductCommand>
     {
         private readonly IDomainService _domainService;
-        private readonly IDataAccessWriteService _writeService;
 
-        public ProductCommandHandler(IDomainService domainService, IDataAccessWriteService writeService)
+        public ProductCommandHandler(IDomainService domainService)
         {
             _domainService = domainService;
-            _writeService = writeService;
         }
-        public Task ExecuteAsync(CreateProductCommand command)
+
+        public async Task ExecuteAsync(CreateProductCommand command)
         {
-            var productCategoryDomain = new ProductDomain(_writeService);
+            var productCategoryDomain = new ProductDomain(_domainService.WriteService);
             productCategoryDomain.Add(new ProductDto
             {
                 Name = command.Name
             });
 
-            _domainService.ApplyChanges(productCategoryDomain);
-            return Task.CompletedTask;
+            await _domainService.ApplyChangesAsync(productCategoryDomain);
         }
 
-        public Task ExecuteAsync(UpdateProductCommand command)
+        public async Task ExecuteAsync(UpdateProductCommand command)
         {
-            var productCategoryDomain = new ProductDomain(_writeService);
+            var productCategoryDomain = new ProductDomain(_domainService.WriteService);
             productCategoryDomain.Update(new ProductDto
             {
                 Id = command.Id,
                 Name = command.Name
             });
 
-            _domainService.ApplyChanges(productCategoryDomain);
-            return Task.CompletedTask;
+            await _domainService.ApplyChangesAsync(productCategoryDomain);
         }
 
-        public Task ExecuteAsync(DeleteProductCommand command)
+        public async Task ExecuteAsync(DeleteProductCommand command)
         {
-            var productCategoryDomain = new ProductDomain(_writeService);
+            var productCategoryDomain = new ProductDomain(_domainService.WriteService);
             productCategoryDomain.Delete(command.Id);
 
-            _domainService.ApplyChanges(productCategoryDomain);
-            return Task.CompletedTask;
+            await _domainService.ApplyChangesAsync(productCategoryDomain);
         }
     }
 }

@@ -1,0 +1,211 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: microservices-identity-db
+spec:
+  type: ClusterIP
+  ports:
+  - name: mysql
+    protocol: TCP
+    port: 3306
+    targetPort: 3306
+  selector:
+    app: microservices-identity-db
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: microservices-identity-db
+spec:
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      app: microservices-identity-db
+  template:
+    metadata:
+      labels:
+        app: microservices-identity-db
+    spec:
+      containers:
+      - image: ezstoremicroservices/microservices.identity.db
+        name: microservices-identity-db
+        ports:
+        - containerPort: 3306
+          name: mysql
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: microservices-services-queue
+spec:
+  type: ClusterIP
+  ports:
+  - name: rabbitmq
+    protocol: TCP
+    port: 5672
+    targetPort: 5672
+  - name: epmd
+    protocol: TCP
+    port: 4369
+    targetPort: epmd
+  selector:
+    app: microservices-services-queue
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: microservices-services-queue
+spec:
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      app: microservices-services-queue
+  template:
+    metadata:
+      labels:
+        app: microservices-services-queue
+    spec:
+      containers:
+      - image: ezstoremicroservices/microservices.services.queue
+        name: microservices-services-queue
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: microservices-services-db
+spec:
+  type: ClusterIP
+  ports:
+  - name: mongodb
+    protocol: TCP
+    port: 27017
+    targetPort: 27017
+  selector:
+    app: microservices-services-db
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: microservices-services-db
+spec:
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      app: microservices-services-db
+  template:
+    metadata:
+      labels:
+        app: microservices-services-db
+    spec:
+      containers:
+      - image: ezstoremicroservices/microservices.services.db
+        name: microservices-services-db
+        ports:
+        - containerPort: 27017
+          name: mongodb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: microservices-settings-db
+spec:
+  type: ClusterIP
+  ports:
+  - name: mongodb
+    protocol: TCP
+    port: 27017
+    targetPort: 27018
+  selector:
+    app: microservices-settings-db
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: microservices-settings-db
+spec:
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      app: microservices-settings-db
+  template:
+    metadata:
+      labels:
+        app: microservices-settings-db
+    spec:
+      containers:
+      - image: ezstoremicroservices/microservices.settings.db
+        name: microservices-settings-db
+        ports:
+        - containerPort: 27017
+          name: mongodb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: microservices-filesystem-db
+spec:
+  type: ClusterIP
+  ports:
+  - name: mongodb
+    protocol: TCP
+    port: 27017
+    targetPort: 27019
+  selector:
+    app: microservices-filesystem-db
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: microservices-filesystem-db
+spec:
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      app: microservices-filesystem-db
+  template:
+    metadata:
+      labels:
+        app: microservices-filesystem-db
+    spec:
+      containers:
+      - image: ezstoremicroservices/microservices.filesystem.db
+        name: microservices-filesystem-db
+        ports:
+        - containerPort: 27017
+          name: mongodb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: microservices-services-redis
+spec:
+  type: ClusterIP
+  ports:
+  - name: redis
+    protocol: TCP
+    port: 6379
+    targetPort: 6379
+  selector:
+    app: microservices-services-redis
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: microservices-services-redis
+spec:
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      app: microservices-services-redis
+  template:
+    metadata:
+      labels:
+        app: microservices-services-redis
+    spec:
+      containers:
+      - image: ezstoremicroservices/microservices.services.redis
+        name: microservices-services-redis
+        ports:
+        - containerPort: 6379
+          name: redis
+---

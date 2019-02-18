@@ -6,23 +6,20 @@ using ezStore.Product.ApplicationCore.Dtos;
 
 namespace ezStore.Product.ApplicationCore.Services.CommandHandlers
 {
-    public class ProductCategoryCommandHandler
-        : ICommandHandler<CreateProductCategoryCommand>,
+    public class ProductCategoryCommandHandler : ICommandHandler<CreateProductCategoryCommand>,
         ICommandHandler<UpdateProductCategoryCommand>,
         ICommandHandler<DeleteProductCategoryCommand>
     {
         private readonly IDomainService _domainService;
-        private readonly IDataAccessWriteService _writeService;
 
-        public ProductCategoryCommandHandler(IDomainService domainService, IDataAccessWriteService writeService)
+        public ProductCategoryCommandHandler(IDomainService domainService)
         {
             _domainService = domainService;
-            _writeService = writeService;
         }
 
         public Task ExecuteAsync(CreateProductCategoryCommand command)
         {
-            var productCategoryDomain = new ProductCategoryDomain(_writeService);
+            var productCategoryDomain = new ProductCategoryDomain(_domainService.WriteService);
             productCategoryDomain.Add(new ProductCategoryDto
             {
                 Name = command.Name
@@ -34,7 +31,7 @@ namespace ezStore.Product.ApplicationCore.Services.CommandHandlers
 
         public Task ExecuteAsync(UpdateProductCategoryCommand command)
         {
-            var productCategoryDomain = new ProductCategoryDomain(_writeService);
+            var productCategoryDomain = new ProductCategoryDomain(_domainService.WriteService);
             productCategoryDomain.Update(new ProductCategoryDto
             {
                 Id = command.Id,
@@ -47,7 +44,7 @@ namespace ezStore.Product.ApplicationCore.Services.CommandHandlers
 
         public Task ExecuteAsync(DeleteProductCategoryCommand command)
         {
-            var productCategoryDomain = new ProductCategoryDomain(_writeService);
+            var productCategoryDomain = new ProductCategoryDomain(_domainService.WriteService);
             productCategoryDomain.Delete(command.Id);
 
             _domainService.ApplyChanges(productCategoryDomain);

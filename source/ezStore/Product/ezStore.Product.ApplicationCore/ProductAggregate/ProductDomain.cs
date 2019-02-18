@@ -9,7 +9,7 @@ namespace ezStore.Product.ApplicationCore.ProductAggregate
 {
     public class ProductDomain : AggregateRoot
     {
-        public ProductDomain(IDataAccessService dataAccessService) : base(dataAccessService)
+        public ProductDomain(IDataAccessWriteService dataAccessService) : base(dataAccessService)
         {
         }
 

@@ -5,7 +5,7 @@ namespace ezStore.Order.ApplicationCore.ProductAggregate
 {
     public class OrderDomain : AggregateRoot
     {
-        public OrderDomain(IDataAccessService dataAccessService) : base(dataAccessService)
+        public OrderDomain(IDataAccessWriteService dataAccessService) : base(dataAccessService)
         {
         }
     }

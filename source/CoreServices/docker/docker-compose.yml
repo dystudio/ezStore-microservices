@@ -1,0 +1,90 @@
+version: '3.5'
+
+networks:
+  microservices-network:
+    name: microservices-network
+    driver: bridge
+    
+services:
+  microservices.identityserver:
+    image: microservices.identityserver
+    container_name: microservices-identityserver
+    build:
+      context: ../Member/Microservices.IdentityServer
+      dockerfile: Dockerfile.deploy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - 5001:80
+    networks:
+      - microservices-network
+    command: ["/bin/bash", "-c", "dotnet /app/Microservices.IdentityServer.dll"]
+
+  microservices.logging.api:
+    image: microservices.logging.api
+    build:
+      context: ../Logging/Microservices.Logging.API
+      dockerfile: Dockerfile.deploy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - 5002:80
+    networks:
+      - microservices-network
+    command: ["/bin/bash", "-c", "dotnet /app/Microservices.Logging.API.dll"]
+
+  microservices.setting.api:
+    image: microservices.setting.api
+    container_name: microservices-setting-api
+    build:
+      context: ../Setting/Microservices.Setting.API
+      dockerfile: Dockerfile.deploy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - 5003:80
+    networks:
+      - microservices-network
+    command: ["/bin/bash", "-c", "dotnet /app/Microservices.Setting.API.dll"]
+
+  microservices.filesystem.api:
+    image: microservices.filesystem.api
+    container_name: microservices-filesystem-api
+    build:
+      context: ../FileSystem/Microservices.FileSystem.API
+      dockerfile: Dockerfile.deploy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - 5004:80
+    networks:
+      - microservices-network
+    command: ["/bin/bash", "-c", "dotnet /app/Microservices.FileSystem.API.dll"]
+
+  microservices.logging.backgroundprocess:
+    image: microservices.logging.backgroundprocess
+    build:
+      context: ../Logging/Microservices.Logging.BackgroundProcess
+      dockerfile: Dockerfile.deploy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
+    networks:
+      - microservices-network
+    command: ["/bin/bash", "-c", "dotnet /app/Microservices.Logging.BackgroundProcess.dll"]
+
+  microservices.notification.backgroundprocess:
+    image: microservices.notification.backgroundprocess
+    build:
+      context: ../Notification/Microservices.Notification.BackgroundProcess
+      dockerfile: Dockerfile.deploy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
+    dns:
+      - 8.8.8.8
+    networks:
+      - microservices-network
+    command: ["/bin/bash", "-c", "dotnet /app/Microservices.Notification.BackgroundProcess.dll"]

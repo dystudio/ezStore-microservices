@@ -1,0 +1,59 @@
+version: '3.5'
+
+networks:
+  microservices-network:
+    name: microservices-network
+    driver: bridge
+
+services:
+  ezStore.order.api:
+    image: ezstore.order.api
+    build:
+      context: ../Order/ezStore.Order.API
+      dockerfile: Dockerfile.deploy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - 6001:80
+    networks:
+      - microservices-network
+    command: ["/bin/bash", "-c", "dotnet /app/ezStore.Order.API.dll"]
+
+  ezStore.payment.api:
+    image: ezstore.payment.api
+    build:
+      context: ../Payment/ezStore.Payment.API
+      dockerfile: Dockerfile.deploy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - 6002:80
+    networks:
+      - microservices-network
+    command: ["/bin/bash", "-c", "dotnet /app/ezStore.Payment.API.dll"]
+
+  ezStore.product.api:
+    image: ezstore.product.api
+    build:
+      context: ../Product/ezStore.Product.API
+      dockerfile: Dockerfile.deploy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - 6003:80
+    networks:
+      - microservices-network
+    command: ["/bin/bash", "-c", "dotnet /app/ezStore.Product.API.dll"]
+
+  ezStore.warehouse.api:
+    image: ezstore.warehouse.api
+    build:
+      context: ../WareHouse/ezStore.WareHouse.API
+      dockerfile: Dockerfile.deploy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - 6004:80
+    networks:
+      - microservices-network
+    command: ["/bin/bash", "-c", "dotnet /app/ezStore.WareHouse.API.dll"]

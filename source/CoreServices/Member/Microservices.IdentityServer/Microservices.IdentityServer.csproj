@@ -4,7 +4,6 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <Authors>Khai Nguyen (khainx127@gmail.com)</Authors>
     <Product>Microservices</Product>
-    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,13 +15,13 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="4.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="4.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="4.0.1" />
-    <PackageReference Include="Ws4vn.Microservices.Infrastructure" Version="1.0.3" />
-    <PackageReference Include="Ws4vn.Microservices.Infrastructure.MongoDB" Version="1.0.3" />
-    <PackageReference Include="Ws4vn.Microservices.Infrastructure.RabbitMQ" Version="1.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Microservices.Member.ApplicationCore\Microservices.Member.ApplicationCore.csproj" />
+    <ProjectReference Include="..\..\..\ws4vn-microservices-library\Microservices.Infrastructure\Ws4vn.Microservices.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\ws4vn-microservices-library\Microservices.Infrastructure.MongoDB\Ws4vn.Microservices.Infrastructure.MongoDB.csproj" />
+    <ProjectReference Include="..\..\..\ws4vn-microservices-library\Microservices.Infrastructure.RabbitMQ\Ws4vn.Microservices.Infrastructure.RabbitMQ.csproj" />
   </ItemGroup>
 
   <ItemGroup>

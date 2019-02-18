@@ -16,30 +16,29 @@
 - Istio-1.0.2
 
 ## IDE
-- Visual Studio Community 2017
 - Visual Studio Code
 
-## Docker (recommend high RAM)
-- CPUs: 2
-- RAM: >= 5000MB
-- Swap: >= 4096 MB
-
 ## Local Development
-- First run `docker-compose -f docker-compose.init.yml up` to start databases and queues
+- From folder `CoreServices`, run `docker-compose -f docker/docker-compose.init.yml up` to start databases and queues
 - Wait for databases and queues ready
-- Run application from Visual Studio.
-- Run Angular6 project from `source\03.ezStoreWebUI` by `npm start`. Note: I am using port 7001
+- Run task `Run CoreServices` to start `CoreServices`
+
+- From folder `ezStore`, run `docker-compose -f docker/docker-compose.init.yml up` to start databases and queues
+- Wait for databases and queues ready
+
+- Run Angular6 project from `ezStoreWebUI` by `npm start`. Note: I am using port 7001
 - If you want to deploy Angular project to docker, build project `ng build --prod` then run `docker-compose -f docker-compose-webui.yml up`
-- Open IdentityServer: http://localhost:5001, http://localhost:5001/swagger
-- Open Logging Api: http://localhost:5002/swagger
-- Open Setting Api: http://localhost:5003/swagger
-- Open FileSystem Api: http://localhost:5004/swagger
-- Open Order Api: http://localhost:6001/swagger
-- Open Payment Api: http://localhost:6002/swagger
-- Open Product Api: http://localhost:6003/swagger
-- Open Warehouse Api: http://localhost:6004/swagger
+
+- Open IdentityServer: http://localhost:55161, http://localhost:55161/swagger
+- Open Logging Api: http://localhost:55160/swagger
+- Open Setting Api: http://localhost:55163/swagger
+- Open FileSystem Api: http://localhost:55159/swagger
+- Open Order Api: http://localhost:45160/swagger
+- Open Payment Api: http://localhost:45161/swagger
+- Open Product Api: http://localhost:45162/swagger
+- Open Warehouse Api: http://localhost:45163/swagger
 - Open WebUI: http://localhost:7001
-- Use IdentityServer: http://localhost:5001 to create a user, then login by WebUI: http://localhost:7001 to get `token` in `localstorage`
+- Use IdentityServer: http://localhost:55161 to create a user, then login by WebUI: http://localhost:7001 to get `token` in `localstorage`
 - Use `token` as `Bearer Authentication` for `Swagger`
 
 ## Local Kubenetes Deployment 
@@ -113,8 +112,8 @@
 ## Contributing
 - Fork the repo on GitHub
 - Clone the project to your own machine
+- Add `upstream` branch: `git remote add upstream https://github.com/ws4vn/ezStore-microservices`
 - Commit changes to your own branch
+- Be sure to merge the latest from "upstream" before making a pull request!
 - Push your work back up to your fork
 - Submit a Pull request so that we can review your changes
-
-NOTE: Be sure to merge the latest from "upstream" before making a pull request!

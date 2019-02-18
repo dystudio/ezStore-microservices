@@ -1,0 +1,104 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: microservices-identityserver-gateway
+spec:
+  selector:
+    istio: ingressgateway # use Istio default gateway implementation
+  servers:
+  - port:
+      number: 40101
+      name: http
+      protocol: HTTP
+    hosts:
+    - "microservices.identityserver"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: microservices-identityserver
+spec:
+  hosts:
+  - "microservices.identityserver"
+  gateways:
+  - microservices-identityserver-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: microservices-identityserver
+        port:
+          number: 80
+---
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: microservices-logging-gateway
+spec:
+  selector:
+    istio: ingressgateway # use Istio default gateway implementation
+  servers:
+  - port:
+      number: 40102
+      name: http
+      protocol: HTTP
+    hosts:
+    - "microservices.logging"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: microservices-logging
+spec:
+  hosts:
+  - "microservices.logging"
+  gateways:
+  - microservices-logging-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: microservices-logging
+        port:
+          number: 80
+---
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: microservices-settings-gateway
+spec:
+  selector:
+    istio: ingressgateway # use Istio default gateway implementation
+  servers:
+  - port:
+      number: 40103
+      name: http
+      protocol: HTTP
+    hosts:
+    - "microservices.settings"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: microservices-settings
+spec:
+  hosts:
+  - "microservices.settings"
+  gateways:
+  - microservices-settings-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: microservices-settings
+        port:
+          number: 80
+---

@@ -13,15 +13,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.2.1" />
     <PackageReference Include="MongoDB.Driver" Version="2.7.0" />
     <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.3.0" />
-    <PackageReference Include="Ws4vn.Microservices.Infrastructure.MongoDB" Version="1.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Microservices.Setting.ApplicationCore\Microservices.Setting.ApplicationCore.csproj" />
+    <ProjectReference Include="..\..\..\ws4vn-microservices-library\Microservices.Infrastructure.MongoDB\Ws4vn.Microservices.Infrastructure.MongoDB.csproj" />
   </ItemGroup>
 
 </Project>

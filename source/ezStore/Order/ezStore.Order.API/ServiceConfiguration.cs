@@ -49,7 +49,6 @@ namespace ezStore.Order.API
             services.AddScoped<IMessageBus, MessageBus>();
 
             // Add application services.
-            services.AddTransient<IDataAccessService>(i => new DataAccessWriteService(i.GetService<OrderDbContext>()));
             services.AddTransient<IDataAccessWriteService>(i => new DataAccessWriteService(i.GetService<OrderDbContext>()));
             services.AddTransient<IDataAccessReadOnlyService>(i => new DataAccessReadOnlyService(i.GetService<OrderDbContext>()));
 

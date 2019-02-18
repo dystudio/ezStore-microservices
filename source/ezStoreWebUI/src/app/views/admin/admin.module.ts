@@ -4,12 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
 import { AdminRoutingModule } from './admin-routing.module';
+import { NgxLoadingModule } from 'ngx-loading';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    AdminRoutingModule,
+    AdminRoutingModule
   ],
   providers: [
   ],

@@ -9,6 +9,7 @@ import { ProductComponent } from './product.component';
 import { ProductCategoryComponent } from './product-category.component';
 import { ManufactureComponent } from './manufacture.component';
 import { FileSystemService } from '../../../core/services/filesystem.service';
+import { NgxLoadingModule } from 'ngx-loading';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { FileSystemService } from '../../../core/services/filesystem.service';
     FormsModule,
     CatalogRoutingModule,
     ReactiveFormsModule,
+    NgxLoadingModule.forRoot({}),
   ],
   providers: [
     ProductHttpService,

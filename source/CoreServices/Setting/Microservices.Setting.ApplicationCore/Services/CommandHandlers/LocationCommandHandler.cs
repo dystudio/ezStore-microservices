@@ -10,17 +10,15 @@ namespace Microservices.Setting.ApplicationCore.Services.CommandHandlers
         ICommandHandler<DeleteCountryCommand>
     {
         private readonly IDomainService _domainService;
-        private readonly IDataAccessWriteService _writeService;
 
-        public LocationCommandHandler(IDomainService domainService, IDataAccessWriteService writeService)
+        public LocationCommandHandler(IDomainService domainService)
         {
             _domainService = domainService;
-            _writeService = writeService;
         }
 
         public Task ExecuteAsync(CreateCountryCommand command)
         {
-            var locationDomain = new LocationDomain(_writeService);
+            var locationDomain = new LocationDomain(_domainService.WriteService);
             locationDomain.CreateCountry(command.Name, command.IsoCode, command.DisplayOrder, command.Published);
 
             _domainService.ApplyChanges(locationDomain);
@@ -29,7 +27,7 @@ namespace Microservices.Setting.ApplicationCore.Services.CommandHandlers
 
         public Task ExecuteAsync(UpdateCountryCommand command)
         {
-            var locationDomain = new LocationDomain(_writeService);
+            var locationDomain = new LocationDomain(_domainService.WriteService);
             locationDomain.UpdateCountry(command.Id, command.Name, command.IsoCode, command.DisplayOrder, command.Published);
 
             _domainService.ApplyChanges(locationDomain);
@@ -38,7 +36,7 @@ namespace Microservices.Setting.ApplicationCore.Services.CommandHandlers
 
         public Task ExecuteAsync(DeleteCountryCommand command)
         {
-            var locationDomain = new LocationDomain(_writeService);
+            var locationDomain = new LocationDomain(_domainService.WriteService);
             locationDomain.DeleteCountry(command.Id);
 
             _domainService.ApplyChanges(locationDomain);

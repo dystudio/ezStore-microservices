@@ -9,6 +9,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { DashboadRouteModule } from './dashboad-routing.module';
 import { DashboardComponent } from './dashboard.component';
+import { NgxLoadingModule } from 'ngx-loading';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { DashboardComponent } from './dashboard.component';
     DashboadRouteModule,
     ChartsModule,
     BsDropdownModule,
-    ButtonsModule.forRoot()
+    ButtonsModule.forRoot(),
+    NgxLoadingModule.forRoot({}),
   ],
   providers: [
   ],

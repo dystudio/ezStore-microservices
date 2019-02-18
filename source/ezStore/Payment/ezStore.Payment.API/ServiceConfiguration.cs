@@ -49,7 +49,6 @@ namespace ezStore.Payment.API
             services.AddScoped<IMessageBus, MessageBus>();
 
             // Add application services.
-            services.AddTransient<IDataAccessService>(i => new DataAccessWriteService(i.GetService<PaymentDbContext>()));
             services.AddTransient<IDataAccessWriteService>(i => new DataAccessWriteService(i.GetService<PaymentDbContext>()));
             services.AddTransient<IDataAccessReadOnlyService>(i => new DataAccessReadOnlyService(i.GetService<PaymentDbContext>()));
 

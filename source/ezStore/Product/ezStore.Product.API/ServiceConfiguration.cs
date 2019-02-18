@@ -51,7 +51,6 @@ namespace ezStore.Product.API
 
             // Add application services.
             services.AddTransient<IProductCategoryQueries, ProductCategoryQueries>();
-            services.AddTransient<IDataAccessService>(i => new DataAccessWriteService(i.GetService<ProductDbContext>()));
             services.AddTransient<IDataAccessWriteService>(i => new DataAccessWriteService(i.GetService<ProductDbContext>()));
             services.AddTransient<IDataAccessReadOnlyService>(i => new DataAccessReadOnlyService(i.GetService<ProductDbContext>()));
 
