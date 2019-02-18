@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <Authors>Khai Nguyen (khainx127@gmail.com)</Authors>
+    <Authors>Ws4VN team</Authors>
     <Product>Microservices</Product>
   </PropertyGroup>
 

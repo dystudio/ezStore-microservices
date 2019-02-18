@@ -1,6 +1,8 @@
-dotnet build ezStoreMicroservices.sln
-dotnet publish ezStoreMicroservices.sln
-docker-compose -f docker-compose.k8s.yml build 
+dotnet build CoreServices/ezStoreMicroservices-CoreServices.sln
+dotnet publish CoreServices/ezStoreMicroservices-CoreServices.sln
+dotnet build ezStore/ezStoreMicroservices-ezStore.sln
+dotnet publish ezStore/ezStoreMicroservices-ezStore.sln
+docker-compose -f k8s/docker-compose.k8s.yml build 
 
 docker tag microservices.identityserver ezstoremicroservices/microservices.identityserver
 docker push ezstoremicroservices/microservices.identityserver
@@ -10,6 +12,9 @@ docker push ezstoremicroservices/microservices.logging.api
 
 docker tag microservices.setting.api ezstoremicroservices/microservices.setting.api
 docker push ezstoremicroservices/microservices.setting.api
+
+docker tag microservices.filesystem.api ezstoremicroservices/microservices.filesystem.api
+docker push ezstoremicroservices/microservices.filesystem.api
 
 docker tag microservices.logging.background ezstoremicroservices/microservices.logging.background
 docker push ezstoremicroservices/microservices.logging.background

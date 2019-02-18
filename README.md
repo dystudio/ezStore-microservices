@@ -42,12 +42,12 @@
 - Use `token` as `Bearer Authentication` for `Swagger`
 
 ## Local Kubenetes Deployment 
-- (If you want to update Docker Repository) Login Docker Repository by DockerId: ezstoremicroservices   Password: 8dh&^5D@@
-- (If you want to update Docker Repository) Run `k8s\01-build-db.bat`, this will build images for databases and queues then push to Docker repository (optional: if images are already there)
-- Deploy databases and queue to Kubenetes by running `k8s\02-deploy-db.bat`
-- (If you want to update Docker Repository) Run `k8s\03-build-api.bat` to build and publish API image
-- Deploy API to Kubenetes by running `k8s\04-deploy-api.bat`
-- (If you want to update Docker Repository) Run `k8s\05-build-webui.bat` to build WebUI image then run `k8s\06-publish-webui-image.bat` to publish WebUI image
+- (If you want to update Docker Repository) Login Docker Hub `docker login` by DockerId: ezstoremicroservices   Password: 8dh&^5D@@
+- (If you want to update Docker Repository) Run `k8s/01-build-db`, this will build images for databases and queues then push to Docker repository (optional: if images are already there)
+- Deploy databases and queue to Kubenetes by running `k8s/02-deploy-db`
+- (If you want to update Docker Repository) Run `k8s/03-build-api` to build and publish API image
+- Deploy API to Kubenetes by running `k8s/04-deploy-api`
+- (If you want to update Docker Repository) Run `k8s/05-build-webui` to build WebUI image then run `k8s\06-publish-webui-image.bat` to publish WebUI image
 - Deploy WebUI to Kubenetes by running `k8s\07-deploy-webui.bat`
 - Run command: `kubectl get all` to determine runtime port of each services
 - Open IdentityServer: http://localhost:30101, http://localhost:30101/swagger

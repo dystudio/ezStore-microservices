@@ -1,0 +1,84 @@
+version: '3.4'
+
+services:
+  microservices.identityserver:
+    image: microservices.identityserver
+    container_name: microservices-identityserver
+    build:
+      target: deploy
+      context: ../CoreServices/Member/Microservices.IdentityServer
+      dockerfile: Dockerfile.deploy
+
+  microservices.logging.api:
+    image: microservices.logging.api
+    container_name: microservices-logging-api
+    build:
+      target: deploy
+      context: ../CoreServices/Logging/Microservices.Logging.API
+      dockerfile: Dockerfile.deploy
+
+  microservices.setting.api:
+    image: microservices.setting.api
+    container_name: microservices-setting-api
+    build:
+      target: deploy
+      context: ../CoreServices/Setting/Microservices.Setting.API
+      dockerfile: Dockerfile.deploy
+
+  microservices.filesystem.api:
+    image: microservices.filesystem.api
+    container_name: microservices-filesystem-api
+    build:
+      target: deploy
+      context: ../CoreServices/FileSystem/Microservices.FileSystem.API
+      dockerfile: Dockerfile.deploy
+
+  microservices.logging.backgroundprocess:
+    image: microservices.logging.background
+    container_name: microservices-logging-background
+    build:
+      target: deploy
+      context: ../CoreServices/Logging/Microservices.Logging.BackgroundProcess
+      dockerfile: Dockerfile.deploy
+
+  microservices.notification.backgroundprocess:
+    image: microservices.notification.background
+    container_name: microservices-notification-background
+    build:
+      target: deploy
+      context: ../CoreServices/Notification/Microservices.Notification.BackgroundProcess
+      dockerfile: Dockerfile.deploy
+    dns:
+      - 8.8.8.8
+
+  ezstore.order.api:
+    image: ezstore.order.api
+    container_name: ezstore-order-api
+    build:
+      target: deploy
+      context: ../ezStore/Order/ezStore.Order.API
+      dockerfile: Dockerfile.deploy
+
+  ezstore.payment.api:
+    image: ezstore.payment.api
+    container_name: ezstore-payment-api
+    build:
+      target: deploy
+      context: ../ezStore/Payment/ezStore.Payment.API
+      dockerfile: Dockerfile.deploy
+
+  ezstore.product.api:
+    image: ezstore.product.api
+    container_name: ezstore-product-api
+    build:
+      target: deploy
+      context: ../ezStore/Product/ezStore.Product.API
+      dockerfile: Dockerfile.deploy
+
+  ezstore.warehouse.api:
+    image: ezstore.warehouse.api
+    container_name: ezstore-warehouse-api
+    build:
+      target: deploy
+      context: ../ezStore/WareHouse/ezStore.WareHouse.API
+      dockerfile: Dockerfile.deploy
