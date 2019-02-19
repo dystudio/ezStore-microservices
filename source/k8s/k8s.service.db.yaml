@@ -12,7 +12,7 @@ spec:
   selector:
     app: microservices-identity-db
 ---
-apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: microservices-identity-db
@@ -33,6 +33,7 @@ spec:
         - containerPort: 3306
           name: mysql
 ---
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -51,7 +52,7 @@ spec:
   selector:
     app: microservices-services-queue
 ---
-apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: microservices-services-queue
@@ -59,7 +60,7 @@ spec:
   minReadySeconds: 10
   selector:
     matchLabels:
-      app: microservices-services-queue
+      app: "microservices-services-queue"
   template:
     metadata:
       labels:
@@ -68,6 +69,7 @@ spec:
       containers:
       - image: ezstoremicroservices/microservices.services.queue
         name: microservices-services-queue
+---
 ---
 apiVersion: v1
 kind: Service
@@ -83,7 +85,7 @@ spec:
   selector:
     app: microservices-services-db
 ---
-apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: microservices-services-db
@@ -104,6 +106,7 @@ spec:
         - containerPort: 27017
           name: mongodb
 ---
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -118,7 +121,7 @@ spec:
   selector:
     app: microservices-settings-db
 ---
-apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: microservices-settings-db
@@ -126,7 +129,7 @@ spec:
   minReadySeconds: 10
   selector:
     matchLabels:
-      app: microservices-settings-db
+      app: "microservices-settings-db"
   template:
     metadata:
       labels:
@@ -138,6 +141,7 @@ spec:
         ports:
         - containerPort: 27017
           name: mongodb
+---
 ---
 apiVersion: v1
 kind: Service
@@ -153,7 +157,7 @@ spec:
   selector:
     app: microservices-filesystem-db
 ---
-apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: microservices-filesystem-db
@@ -174,6 +178,7 @@ spec:
         - containerPort: 27017
           name: mongodb
 ---
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -188,7 +193,7 @@ spec:
   selector:
     app: microservices-services-redis
 ---
-apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: microservices-services-redis
@@ -196,7 +201,7 @@ spec:
   minReadySeconds: 10
   selector:
     matchLabels:
-      app: microservices-services-redis
+      app: "microservices-services-redis"
   template:
     metadata:
       labels:
@@ -208,6 +213,7 @@ spec:
         ports:
         - containerPort: 6379
           name: redis
+---
 ---
 apiVersion: v1
 kind: Service
@@ -223,7 +229,7 @@ spec:
   selector:
     app: ezstore-order-db
 ---
-apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: ezstore-order-db
@@ -243,7 +249,7 @@ spec:
         ports:
         - containerPort: 3306
           name: mysql
-
+---
 ---
 apiVersion: v1
 kind: Service
@@ -259,7 +265,7 @@ spec:
   selector:
     app: ezstore-payment-db
 ---
-apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: ezstore-payment-db
@@ -279,7 +285,7 @@ spec:
         ports:
         - containerPort: 3306
           name: mysql
-
+---
 ---
 apiVersion: v1
 kind: Service
@@ -295,7 +301,7 @@ spec:
   selector:
     app: ezstore-product-db
 ---
-apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: ezstore-product-db
@@ -315,7 +321,7 @@ spec:
         ports:
         - containerPort: 3306
           name: mysql
-
+---
 ---
 apiVersion: v1
 kind: Service
@@ -331,7 +337,7 @@ spec:
   selector:
     app: ezstore-warehouse-db
 ---
-apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: ezstore-warehouse-db

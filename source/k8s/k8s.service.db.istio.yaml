@@ -1,491 +1,42 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: microservices-identityserver
-spec:
-  type: NodePort
-  ports:
-  - name: identityserver
-    protocol: TCP
-    port: 80
-    nodePort: 30101
-  selector:
-    app: microservices-identityserver
----
-apiVersion: apps/v1beta1
-kind: Deployment
-metadata:
-  creationTimestamp: null
-  name: microservices-identityserver
-spec:
-  minReadySeconds: 10
-  replicas: 1
-  strategy:
-    type: Recreate
-  template:
-    metadata:
-      annotations:
-        sidecar.istio.io/status: '{"version":"887285bb7fa76191bf7f637f283183f0ba057323b078d44c3db45978346cbc1a","initContainers":["istio-init"],"containers":["istio-proxy"],"volumes":["istio-envoy","istio-certs"],"imagePullSecrets":null}'
-      creationTimestamp: null
-      labels:
-        app: microservices-identityserver
-    spec:
-      containers:
-      - args:
-        - -c
-        - dotnet /app/Microservices.IdentityServer.dll
-        command:
-        - /bin/bash
-        env:
-        - name: ASPNETCORE_ENVIRONMENT
-          value: k8s
-        image: ezstoremicroservices/microservices.identityserver
-        name: microservices-identityserver
-        ports:
-        - containerPort: 80
-        resources: {}
-      - args:
-        - proxy
-        - sidecar
-        - --configPath
-        - /etc/istio/proxy
-        - --binaryPath
-        - /usr/local/bin/envoy
-        - --serviceCluster
-        - microservices-identityserver
-        - --drainDuration
-        - 45s
-        - --parentShutdownDuration
-        - 1m0s
-        - --discoveryAddress
-        - istio-pilot.istio-system:15005
-        - --discoveryRefreshDelay
-        - 1s
-        - --zipkinAddress
-        - zipkin.istio-system:9411
-        - --connectTimeout
-        - 10s
-        - --proxyAdminPort
-        - "15000"
-        - --controlPlaneAuthPolicy
-        - MUTUAL_TLS
-        env:
-        - name: POD_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
-        - name: POD_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        - name: INSTANCE_IP
-          valueFrom:
-            fieldRef:
-              fieldPath: status.podIP
-        - name: ISTIO_META_POD_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
-        - name: ISTIO_META_INTERCEPTION_MODE
-          value: REDIRECT
-        - name: ISTIO_METAJSON_LABELS
-          value: |
-            {"app":"microservices-identityserver"}
-        image: docker.io/istio/proxyv2:1.0.6
-        imagePullPolicy: IfNotPresent
-        name: istio-proxy
-        ports:
-        - containerPort: 15090
-          name: http-envoy-prom
-          protocol: TCP
-        resources:
-          requests:
-            cpu: 10m
-        securityContext:
-          readOnlyRootFilesystem: true
-          runAsUser: 1337
-        volumeMounts:
-        - mountPath: /etc/istio/proxy
-          name: istio-envoy
-        - mountPath: /etc/certs/
-          name: istio-certs
-          readOnly: true
-      initContainers:
-      - args:
-        - -p
-        - "15001"
-        - -u
-        - "1337"
-        - -m
-        - REDIRECT
-        - -i
-        - '*'
-        - -x
-        - ""
-        - -b
-        - "80"
-        - -d
-        - ""
-        image: docker.io/istio/proxy_init:1.0.6
-        imagePullPolicy: IfNotPresent
-        name: istio-init
-        resources: {}
-        securityContext:
-          capabilities:
-            add:
-            - NET_ADMIN
-          privileged: true
-      volumes:
-      - emptyDir:
-          medium: Memory
-        name: istio-envoy
-      - name: istio-certs
-        secret:
-          optional: true
-          secretName: istio.default
-status: {}
----
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: microservices-logging-api
-spec:
-  type: NodePort
-  ports:
-  - name: logging-api
-    protocol: TCP
-    port: 80
-    nodePort: 30102
-  selector:
-    app: microservices-logging-api
----
-apiVersion: apps/v1beta1
-kind: Deployment
-metadata:
-  creationTimestamp: null
-  name: microservices-logging-api
-spec:
-  minReadySeconds: 10
-  replicas: 1
-  strategy:
-    type: Recreate
-  template:
-    metadata:
-      annotations:
-        sidecar.istio.io/status: '{"version":"887285bb7fa76191bf7f637f283183f0ba057323b078d44c3db45978346cbc1a","initContainers":["istio-init"],"containers":["istio-proxy"],"volumes":["istio-envoy","istio-certs"],"imagePullSecrets":null}'
-      creationTimestamp: null
-      labels:
-        app: microservices-logging-api
-    spec:
-      containers:
-      - args:
-        - -c
-        - dotnet /app/Microservices.Logging.API.dll
-        command:
-        - /bin/bash
-        env:
-        - name: ASPNETCORE_ENVIRONMENT
-          value: k8s
-        image: ezstoremicroservices/microservices.logging.api
-        name: microservices-logging-api
-        ports:
-        - containerPort: 80
-        resources: {}
-      - args:
-        - proxy
-        - sidecar
-        - --configPath
-        - /etc/istio/proxy
-        - --binaryPath
-        - /usr/local/bin/envoy
-        - --serviceCluster
-        - microservices-logging-api
-        - --drainDuration
-        - 45s
-        - --parentShutdownDuration
-        - 1m0s
-        - --discoveryAddress
-        - istio-pilot.istio-system:15005
-        - --discoveryRefreshDelay
-        - 1s
-        - --zipkinAddress
-        - zipkin.istio-system:9411
-        - --connectTimeout
-        - 10s
-        - --proxyAdminPort
-        - "15000"
-        - --controlPlaneAuthPolicy
-        - MUTUAL_TLS
-        env:
-        - name: POD_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
-        - name: POD_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        - name: INSTANCE_IP
-          valueFrom:
-            fieldRef:
-              fieldPath: status.podIP
-        - name: ISTIO_META_POD_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
-        - name: ISTIO_META_INTERCEPTION_MODE
-          value: REDIRECT
-        - name: ISTIO_METAJSON_LABELS
-          value: |
-            {"app":"microservices-logging-api"}
-        image: docker.io/istio/proxyv2:1.0.6
-        imagePullPolicy: IfNotPresent
-        name: istio-proxy
-        ports:
-        - containerPort: 15090
-          name: http-envoy-prom
-          protocol: TCP
-        resources:
-          requests:
-            cpu: 10m
-        securityContext:
-          readOnlyRootFilesystem: true
-          runAsUser: 1337
-        volumeMounts:
-        - mountPath: /etc/istio/proxy
-          name: istio-envoy
-        - mountPath: /etc/certs/
-          name: istio-certs
-          readOnly: true
-      initContainers:
-      - args:
-        - -p
-        - "15001"
-        - -u
-        - "1337"
-        - -m
-        - REDIRECT
-        - -i
-        - '*'
-        - -x
-        - ""
-        - -b
-        - "80"
-        - -d
-        - ""
-        image: docker.io/istio/proxy_init:1.0.6
-        imagePullPolicy: IfNotPresent
-        name: istio-init
-        resources: {}
-        securityContext:
-          capabilities:
-            add:
-            - NET_ADMIN
-          privileged: true
-      volumes:
-      - emptyDir:
-          medium: Memory
-        name: istio-envoy
-      - name: istio-certs
-        secret:
-          optional: true
-          secretName: istio.default
-status: {}
----
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: microservices-setting-api
-spec:
-  type: NodePort
-  ports:
-  - name: setting-api
-    protocol: TCP
-    port: 80
-    nodePort: 30103
-  selector:
-    app: microservices-setting-api
----
-apiVersion: apps/v1beta1
-kind: Deployment
-metadata:
-  creationTimestamp: null
-  name: microservices-setting-api
-spec:
-  minReadySeconds: 10
-  replicas: 1
-  strategy:
-    type: Recreate
-  template:
-    metadata:
-      annotations:
-        sidecar.istio.io/status: '{"version":"887285bb7fa76191bf7f637f283183f0ba057323b078d44c3db45978346cbc1a","initContainers":["istio-init"],"containers":["istio-proxy"],"volumes":["istio-envoy","istio-certs"],"imagePullSecrets":null}'
-      creationTimestamp: null
-      labels:
-        app: microservices-setting-api
-    spec:
-      containers:
-      - args:
-        - -c
-        - dotnet /app/Microservices.Setting.API.dll
-        command:
-        - /bin/bash
-        env:
-        - name: ASPNETCORE_ENVIRONMENT
-          value: k8s
-        image: ezstoremicroservices/microservices.setting.api
-        name: microservices-setting-api
-        ports:
-        - containerPort: 80
-        resources: {}
-      - args:
-        - proxy
-        - sidecar
-        - --configPath
-        - /etc/istio/proxy
-        - --binaryPath
-        - /usr/local/bin/envoy
-        - --serviceCluster
-        - microservices-setting-api
-        - --drainDuration
-        - 45s
-        - --parentShutdownDuration
-        - 1m0s
-        - --discoveryAddress
-        - istio-pilot.istio-system:15005
-        - --discoveryRefreshDelay
-        - 1s
-        - --zipkinAddress
-        - zipkin.istio-system:9411
-        - --connectTimeout
-        - 10s
-        - --proxyAdminPort
-        - "15000"
-        - --controlPlaneAuthPolicy
-        - MUTUAL_TLS
-        env:
-        - name: POD_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
-        - name: POD_NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
-        - name: INSTANCE_IP
-          valueFrom:
-            fieldRef:
-              fieldPath: status.podIP
-        - name: ISTIO_META_POD_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
-        - name: ISTIO_META_INTERCEPTION_MODE
-          value: REDIRECT
-        - name: ISTIO_METAJSON_LABELS
-          value: |
-            {"app":"microservices-setting-api"}
-        image: docker.io/istio/proxyv2:1.0.6
-        imagePullPolicy: IfNotPresent
-        name: istio-proxy
-        ports:
-        - containerPort: 15090
-          name: http-envoy-prom
-          protocol: TCP
-        resources:
-          requests:
-            cpu: 10m
-        securityContext:
-          readOnlyRootFilesystem: true
-          runAsUser: 1337
-        volumeMounts:
-        - mountPath: /etc/istio/proxy
-          name: istio-envoy
-        - mountPath: /etc/certs/
-          name: istio-certs
-          readOnly: true
-      initContainers:
-      - args:
-        - -p
-        - "15001"
-        - -u
-        - "1337"
-        - -m
-        - REDIRECT
-        - -i
-        - '*'
-        - -x
-        - ""
-        - -b
-        - "80"
-        - -d
-        - ""
-        image: docker.io/istio/proxy_init:1.0.6
-        imagePullPolicy: IfNotPresent
-        name: istio-init
-        resources: {}
-        securityContext:
-          capabilities:
-            add:
-            - NET_ADMIN
-          privileged: true
-      volumes:
-      - emptyDir:
-          medium: Memory
-        name: istio-envoy
-      - name: istio-certs
-        secret:
-          optional: true
-          secretName: istio.default
-status: {}
----
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: microservices-logging-background
+  name: microservices-identity-db
 spec:
   type: ClusterIP
   ports:
-  - name: logging-background
+  - name: mysql
     protocol: TCP
-    port: 80
+    port: 3306
+    targetPort: 3306
   selector:
-    app: microservices-logging-background
+    app: microservices-identity-db
 ---
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   creationTimestamp: null
-  name: microservices-logging-background
+  name: microservices-identity-db
 spec:
   minReadySeconds: 10
-  replicas: 2
-  strategy:
-    type: Recreate
+  selector:
+    matchLabels:
+      app: microservices-identity-db
+  strategy: {}
   template:
     metadata:
       annotations:
         sidecar.istio.io/status: '{"version":"887285bb7fa76191bf7f637f283183f0ba057323b078d44c3db45978346cbc1a","initContainers":["istio-init"],"containers":["istio-proxy"],"volumes":["istio-envoy","istio-certs"],"imagePullSecrets":null}'
       creationTimestamp: null
       labels:
-        app: microservices-logging-background
+        app: microservices-identity-db
     spec:
       containers:
-      - args:
-        - -c
-        - dotnet /app/Microservices.Logging.BackgroundProcess.dll
-        command:
-        - /bin/bash
-        env:
-        - name: ASPNETCORE_ENVIRONMENT
-          value: k8s
-        image: ezstoremicroservices/microservices.logging.background
-        name: microservices-logging-background
+      - image: ezstoremicroservices/microservices.identity.db
+        name: microservices-identity-db
         ports:
-        - containerPort: 80
+        - containerPort: 3306
+          name: mysql
         resources: {}
       - args:
         - proxy
@@ -495,7 +46,7 @@ spec:
         - --binaryPath
         - /usr/local/bin/envoy
         - --serviceCluster
-        - microservices-logging-background
+        - microservices-identity-db
         - --drainDuration
         - 45s
         - --parentShutdownDuration
@@ -533,7 +84,7 @@ spec:
           value: REDIRECT
         - name: ISTIO_METAJSON_LABELS
           value: |
-            {"app":"microservices-logging-background"}
+            {"app":"microservices-identity-db"}
         image: docker.io/istio/proxyv2:1.0.6
         imagePullPolicy: IfNotPresent
         name: istio-proxy
@@ -566,7 +117,7 @@ spec:
         - -x
         - ""
         - -b
-        - "80"
+        - "3306"
         - -d
         - ""
         image: docker.io/istio/proxy_init:1.0.6
@@ -592,47 +143,43 @@ status: {}
 apiVersion: v1
 kind: Service
 metadata:
-  name: microservices-notification-background
+  name: microservices-services-queue
 spec:
   type: ClusterIP
   ports:
-  - name: logging-api
+  - name: rabbitmq
     protocol: TCP
-    port: 80
+    port: 5672
+    targetPort: 5672
+  - name: epmd
+    protocol: TCP
+    port: 4369
+    targetPort: epmd
   selector:
-    app: microservices-notification-background
+    app: microservices-services-queue
 ---
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   creationTimestamp: null
-  name: microservices-notification-background
+  name: microservices-services-queue
 spec:
   minReadySeconds: 10
-  replicas: 2
-  strategy:
-    type: Recreate
+  selector:
+    matchLabels:
+      app: microservices-services-queue
+  strategy: {}
   template:
     metadata:
       annotations:
         sidecar.istio.io/status: '{"version":"887285bb7fa76191bf7f637f283183f0ba057323b078d44c3db45978346cbc1a","initContainers":["istio-init"],"containers":["istio-proxy"],"volumes":["istio-envoy","istio-certs"],"imagePullSecrets":null}'
       creationTimestamp: null
       labels:
-        app: microservices-notification-background
+        app: microservices-services-queue
     spec:
       containers:
-      - args:
-        - -c
-        - dotnet /app/Microservices.Notification.BackgroundProcess.dll
-        command:
-        - /bin/bash
-        env:
-        - name: ASPNETCORE_ENVIRONMENT
-          value: k8s
-        image: ezstoremicroservices/microservices.notification.background
-        name: microservices-notification-background
-        ports:
-        - containerPort: 80
+      - image: ezstoremicroservices/microservices.services.queue
+        name: microservices-services-queue
         resources: {}
       - args:
         - proxy
@@ -642,7 +189,7 @@ spec:
         - --binaryPath
         - /usr/local/bin/envoy
         - --serviceCluster
-        - microservices-notification-background
+        - microservices-services-queue
         - --drainDuration
         - 45s
         - --parentShutdownDuration
@@ -680,7 +227,7 @@ spec:
           value: REDIRECT
         - name: ISTIO_METAJSON_LABELS
           value: |
-            {"app":"microservices-notification-background"}
+            {"app":"microservices-services-queue"}
         image: docker.io/istio/proxyv2:1.0.6
         imagePullPolicy: IfNotPresent
         name: istio-proxy
@@ -700,9 +247,6 @@ spec:
         - mountPath: /etc/certs/
           name: istio-certs
           readOnly: true
-      dnsConfig:
-        nameservers:
-        - 8.8.8.8
       initContainers:
       - args:
         - -p
@@ -716,7 +260,7 @@ spec:
         - -x
         - ""
         - -b
-        - "80"
+        - ""
         - -d
         - ""
         image: docker.io/istio/proxy_init:1.0.6
@@ -742,48 +286,42 @@ status: {}
 apiVersion: v1
 kind: Service
 metadata:
-  name: ezstore-order-api
+  name: microservices-services-db
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
-  - name: ezstore-order-api
+  - name: mongodb
     protocol: TCP
-    port: 80
-    nodePort: 30201
+    port: 27017
+    targetPort: 27017
   selector:
-    app: ezstore-order-api
+    app: microservices-services-db
 ---
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   creationTimestamp: null
-  name: ezstore-order-api
+  name: microservices-services-db
 spec:
   minReadySeconds: 10
-  replicas: 2
-  strategy:
-    type: Recreate
+  selector:
+    matchLabels:
+      app: microservices-services-db
+  strategy: {}
   template:
     metadata:
       annotations:
         sidecar.istio.io/status: '{"version":"887285bb7fa76191bf7f637f283183f0ba057323b078d44c3db45978346cbc1a","initContainers":["istio-init"],"containers":["istio-proxy"],"volumes":["istio-envoy","istio-certs"],"imagePullSecrets":null}'
       creationTimestamp: null
       labels:
-        app: ezstore-order-api
+        app: microservices-services-db
     spec:
       containers:
-      - args:
-        - -c
-        - dotnet /app/ezStore.Order.API.dll
-        command:
-        - /bin/bash
-        env:
-        - name: ASPNETCORE_ENVIRONMENT
-          value: k8s
-        image: ezstoremicroservices/ezstore.order.api
-        name: ezstore-order-api
+      - image: ezstoremicroservices/microservices.services.db
+        name: microservices-services-db
         ports:
-        - containerPort: 80
+        - containerPort: 27017
+          name: mongodb
         resources: {}
       - args:
         - proxy
@@ -793,7 +331,7 @@ spec:
         - --binaryPath
         - /usr/local/bin/envoy
         - --serviceCluster
-        - ezstore-order-api
+        - microservices-services-db
         - --drainDuration
         - 45s
         - --parentShutdownDuration
@@ -831,7 +369,7 @@ spec:
           value: REDIRECT
         - name: ISTIO_METAJSON_LABELS
           value: |
-            {"app":"ezstore-order-api"}
+            {"app":"microservices-services-db"}
         image: docker.io/istio/proxyv2:1.0.6
         imagePullPolicy: IfNotPresent
         name: istio-proxy
@@ -864,7 +402,7 @@ spec:
         - -x
         - ""
         - -b
-        - "80"
+        - "27017"
         - -d
         - ""
         image: docker.io/istio/proxy_init:1.0.6
@@ -890,48 +428,42 @@ status: {}
 apiVersion: v1
 kind: Service
 metadata:
-  name: ezstore-payment-api
+  name: microservices-settings-db
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
-  - name: ezstore-payment-api
+  - name: mongodb
     protocol: TCP
-    port: 80
-    nodePort: 30202
+    port: 27017
+    targetPort: 27018
   selector:
-    app: ezstore-payment-api
+    app: microservices-settings-db
 ---
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   creationTimestamp: null
-  name: ezstore-payment-api
+  name: microservices-settings-db
 spec:
   minReadySeconds: 10
-  replicas: 2
-  strategy:
-    type: Recreate
+  selector:
+    matchLabels:
+      app: microservices-settings-db
+  strategy: {}
   template:
     metadata:
       annotations:
         sidecar.istio.io/status: '{"version":"887285bb7fa76191bf7f637f283183f0ba057323b078d44c3db45978346cbc1a","initContainers":["istio-init"],"containers":["istio-proxy"],"volumes":["istio-envoy","istio-certs"],"imagePullSecrets":null}'
       creationTimestamp: null
       labels:
-        app: ezstore-payment-api
+        app: microservices-settings-db
     spec:
       containers:
-      - args:
-        - -c
-        - dotnet /app/ezStore.Payment.API.dll
-        command:
-        - /bin/bash
-        env:
-        - name: ASPNETCORE_ENVIRONMENT
-          value: k8s
-        image: ezstoremicroservices/ezstore.payment.api
-        name: ezstore-payment-api
+      - image: ezstoremicroservices/microservices.settings.db
+        name: microservices-settings-db
         ports:
-        - containerPort: 80
+        - containerPort: 27017
+          name: mongodb
         resources: {}
       - args:
         - proxy
@@ -941,7 +473,7 @@ spec:
         - --binaryPath
         - /usr/local/bin/envoy
         - --serviceCluster
-        - ezstore-payment-api
+        - microservices-settings-db
         - --drainDuration
         - 45s
         - --parentShutdownDuration
@@ -979,7 +511,7 @@ spec:
           value: REDIRECT
         - name: ISTIO_METAJSON_LABELS
           value: |
-            {"app":"ezstore-payment-api"}
+            {"app":"microservices-settings-db"}
         image: docker.io/istio/proxyv2:1.0.6
         imagePullPolicy: IfNotPresent
         name: istio-proxy
@@ -1012,7 +544,7 @@ spec:
         - -x
         - ""
         - -b
-        - "80"
+        - "27017"
         - -d
         - ""
         image: docker.io/istio/proxy_init:1.0.6
@@ -1038,48 +570,42 @@ status: {}
 apiVersion: v1
 kind: Service
 metadata:
-  name: ezstore-product-api
+  name: microservices-filesystem-db
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
-  - name: ezstore-product-api
+  - name: mongodb
     protocol: TCP
-    port: 80
-    nodePort: 30203
+    port: 27017
+    targetPort: 27019
   selector:
-    app: ezstore-product-api
+    app: microservices-filesystem-db
 ---
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   creationTimestamp: null
-  name: ezstore-product-api
+  name: microservices-filesystem-db
 spec:
   minReadySeconds: 10
-  replicas: 2
-  strategy:
-    type: Recreate
+  selector:
+    matchLabels:
+      app: microservices-filesystem-db
+  strategy: {}
   template:
     metadata:
       annotations:
         sidecar.istio.io/status: '{"version":"887285bb7fa76191bf7f637f283183f0ba057323b078d44c3db45978346cbc1a","initContainers":["istio-init"],"containers":["istio-proxy"],"volumes":["istio-envoy","istio-certs"],"imagePullSecrets":null}'
       creationTimestamp: null
       labels:
-        app: ezstore-product-api
+        app: microservices-filesystem-db
     spec:
       containers:
-      - args:
-        - -c
-        - dotnet /app/ezStore.Product.API.dll
-        command:
-        - /bin/bash
-        env:
-        - name: ASPNETCORE_ENVIRONMENT
-          value: k8s
-        image: ezstoremicroservices/ezstore.product.api
-        name: ezstore-product-api
+      - image: ezstoremicroservices/microservices.filesystem.db
+        name: microservices-filesystem-db
         ports:
-        - containerPort: 80
+        - containerPort: 27017
+          name: mongodb
         resources: {}
       - args:
         - proxy
@@ -1089,7 +615,7 @@ spec:
         - --binaryPath
         - /usr/local/bin/envoy
         - --serviceCluster
-        - ezstore-product-api
+        - microservices-filesystem-db
         - --drainDuration
         - 45s
         - --parentShutdownDuration
@@ -1127,7 +653,7 @@ spec:
           value: REDIRECT
         - name: ISTIO_METAJSON_LABELS
           value: |
-            {"app":"ezstore-product-api"}
+            {"app":"microservices-filesystem-db"}
         image: docker.io/istio/proxyv2:1.0.6
         imagePullPolicy: IfNotPresent
         name: istio-proxy
@@ -1160,7 +686,7 @@ spec:
         - -x
         - ""
         - -b
-        - "80"
+        - "27017"
         - -d
         - ""
         image: docker.io/istio/proxy_init:1.0.6
@@ -1186,48 +712,42 @@ status: {}
 apiVersion: v1
 kind: Service
 metadata:
-  name: ezstore-warehouse-api
+  name: microservices-services-redis
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
-  - name: ezstore-warehouse-api
+  - name: redis
     protocol: TCP
-    port: 80
-    nodePort: 30204
+    port: 6379
+    targetPort: 6379
   selector:
-    app: ezstore-warehouse-api
+    app: microservices-services-redis
 ---
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   creationTimestamp: null
-  name: ezstore-warehouse-api
+  name: microservices-services-redis
 spec:
   minReadySeconds: 10
-  replicas: 2
-  strategy:
-    type: Recreate
+  selector:
+    matchLabels:
+      app: microservices-services-redis
+  strategy: {}
   template:
     metadata:
       annotations:
         sidecar.istio.io/status: '{"version":"887285bb7fa76191bf7f637f283183f0ba057323b078d44c3db45978346cbc1a","initContainers":["istio-init"],"containers":["istio-proxy"],"volumes":["istio-envoy","istio-certs"],"imagePullSecrets":null}'
       creationTimestamp: null
       labels:
-        app: ezstore-warehouse-api
+        app: microservices-services-redis
     spec:
       containers:
-      - args:
-        - -c
-        - dotnet /app/ezStore.WareHouse.API.dll
-        command:
-        - /bin/bash
-        env:
-        - name: ASPNETCORE_ENVIRONMENT
-          value: k8s
-        image: ezstoremicroservices/ezstore.warehouse.api
-        name: ezstore-warehouse-api
+      - image: ezstoremicroservices/microservices.services.redis
+        name: microservices-services-redis
         ports:
-        - containerPort: 80
+        - containerPort: 6379
+          name: redis
         resources: {}
       - args:
         - proxy
@@ -1237,7 +757,7 @@ spec:
         - --binaryPath
         - /usr/local/bin/envoy
         - --serviceCluster
-        - ezstore-warehouse-api
+        - microservices-services-redis
         - --drainDuration
         - 45s
         - --parentShutdownDuration
@@ -1275,7 +795,7 @@ spec:
           value: REDIRECT
         - name: ISTIO_METAJSON_LABELS
           value: |
-            {"app":"ezstore-warehouse-api"}
+            {"app":"microservices-services-redis"}
         image: docker.io/istio/proxyv2:1.0.6
         imagePullPolicy: IfNotPresent
         name: istio-proxy
@@ -1308,7 +828,7 @@ spec:
         - -x
         - ""
         - -b
-        - "80"
+        - "6379"
         - -d
         - ""
         image: docker.io/istio/proxy_init:1.0.6
@@ -1331,4 +851,570 @@ spec:
 status: {}
 ---
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ezstore-order-db
+spec:
+  type: ClusterIP
+  ports:
+  - name: mysql
+    protocol: TCP
+    port: 3306
+    targetPort: 3306
+  selector:
+    app: ezstore-order-db
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  name: ezstore-order-db
+spec:
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      app: ezstore-order-db
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/status: '{"version":"887285bb7fa76191bf7f637f283183f0ba057323b078d44c3db45978346cbc1a","initContainers":["istio-init"],"containers":["istio-proxy"],"volumes":["istio-envoy","istio-certs"],"imagePullSecrets":null}'
+      creationTimestamp: null
+      labels:
+        app: ezstore-order-db
+    spec:
+      containers:
+      - image: ezstoremicroservices/ezstore.order.db
+        name: ezstore-order-db
+        ports:
+        - containerPort: 3306
+          name: mysql
+        resources: {}
+      - args:
+        - proxy
+        - sidecar
+        - --configPath
+        - /etc/istio/proxy
+        - --binaryPath
+        - /usr/local/bin/envoy
+        - --serviceCluster
+        - ezstore-order-db
+        - --drainDuration
+        - 45s
+        - --parentShutdownDuration
+        - 1m0s
+        - --discoveryAddress
+        - istio-pilot.istio-system:15005
+        - --discoveryRefreshDelay
+        - 1s
+        - --zipkinAddress
+        - zipkin.istio-system:9411
+        - --connectTimeout
+        - 10s
+        - --proxyAdminPort
+        - "15000"
+        - --controlPlaneAuthPolicy
+        - MUTUAL_TLS
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: INSTANCE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: ISTIO_META_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: ISTIO_META_INTERCEPTION_MODE
+          value: REDIRECT
+        - name: ISTIO_METAJSON_LABELS
+          value: |
+            {"app":"ezstore-order-db"}
+        image: docker.io/istio/proxyv2:1.0.6
+        imagePullPolicy: IfNotPresent
+        name: istio-proxy
+        ports:
+        - containerPort: 15090
+          name: http-envoy-prom
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 10m
+        securityContext:
+          readOnlyRootFilesystem: true
+          runAsUser: 1337
+        volumeMounts:
+        - mountPath: /etc/istio/proxy
+          name: istio-envoy
+        - mountPath: /etc/certs/
+          name: istio-certs
+          readOnly: true
+      initContainers:
+      - args:
+        - -p
+        - "15001"
+        - -u
+        - "1337"
+        - -m
+        - REDIRECT
+        - -i
+        - '*'
+        - -x
+        - ""
+        - -b
+        - "3306"
+        - -d
+        - ""
+        image: docker.io/istio/proxy_init:1.0.6
+        imagePullPolicy: IfNotPresent
+        name: istio-init
+        resources: {}
+        securityContext:
+          capabilities:
+            add:
+            - NET_ADMIN
+          privileged: true
+      volumes:
+      - emptyDir:
+          medium: Memory
+        name: istio-envoy
+      - name: istio-certs
+        secret:
+          optional: true
+          secretName: istio.default
+status: {}
+---
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ezstore-payment-db
+spec:
+  type: ClusterIP
+  ports:
+  - name: mysql
+    protocol: TCP
+    port: 3306
+    targetPort: 3306
+  selector:
+    app: ezstore-payment-db
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  name: ezstore-payment-db
+spec:
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      app: ezstore-payment-db
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/status: '{"version":"887285bb7fa76191bf7f637f283183f0ba057323b078d44c3db45978346cbc1a","initContainers":["istio-init"],"containers":["istio-proxy"],"volumes":["istio-envoy","istio-certs"],"imagePullSecrets":null}'
+      creationTimestamp: null
+      labels:
+        app: ezstore-payment-db
+    spec:
+      containers:
+      - image: ezstoremicroservices/ezstore.payment.db
+        name: ezstore-payment-db
+        ports:
+        - containerPort: 3306
+          name: mysql
+        resources: {}
+      - args:
+        - proxy
+        - sidecar
+        - --configPath
+        - /etc/istio/proxy
+        - --binaryPath
+        - /usr/local/bin/envoy
+        - --serviceCluster
+        - ezstore-payment-db
+        - --drainDuration
+        - 45s
+        - --parentShutdownDuration
+        - 1m0s
+        - --discoveryAddress
+        - istio-pilot.istio-system:15005
+        - --discoveryRefreshDelay
+        - 1s
+        - --zipkinAddress
+        - zipkin.istio-system:9411
+        - --connectTimeout
+        - 10s
+        - --proxyAdminPort
+        - "15000"
+        - --controlPlaneAuthPolicy
+        - MUTUAL_TLS
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: INSTANCE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: ISTIO_META_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: ISTIO_META_INTERCEPTION_MODE
+          value: REDIRECT
+        - name: ISTIO_METAJSON_LABELS
+          value: |
+            {"app":"ezstore-payment-db"}
+        image: docker.io/istio/proxyv2:1.0.6
+        imagePullPolicy: IfNotPresent
+        name: istio-proxy
+        ports:
+        - containerPort: 15090
+          name: http-envoy-prom
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 10m
+        securityContext:
+          readOnlyRootFilesystem: true
+          runAsUser: 1337
+        volumeMounts:
+        - mountPath: /etc/istio/proxy
+          name: istio-envoy
+        - mountPath: /etc/certs/
+          name: istio-certs
+          readOnly: true
+      initContainers:
+      - args:
+        - -p
+        - "15001"
+        - -u
+        - "1337"
+        - -m
+        - REDIRECT
+        - -i
+        - '*'
+        - -x
+        - ""
+        - -b
+        - "3306"
+        - -d
+        - ""
+        image: docker.io/istio/proxy_init:1.0.6
+        imagePullPolicy: IfNotPresent
+        name: istio-init
+        resources: {}
+        securityContext:
+          capabilities:
+            add:
+            - NET_ADMIN
+          privileged: true
+      volumes:
+      - emptyDir:
+          medium: Memory
+        name: istio-envoy
+      - name: istio-certs
+        secret:
+          optional: true
+          secretName: istio.default
+status: {}
+---
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ezstore-product-db
+spec:
+  type: ClusterIP
+  ports:
+  - name: mysql
+    protocol: TCP
+    port: 3306
+    targetPort: 3306
+  selector:
+    app: ezstore-product-db
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  name: ezstore-product-db
+spec:
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      app: ezstore-product-db
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/status: '{"version":"887285bb7fa76191bf7f637f283183f0ba057323b078d44c3db45978346cbc1a","initContainers":["istio-init"],"containers":["istio-proxy"],"volumes":["istio-envoy","istio-certs"],"imagePullSecrets":null}'
+      creationTimestamp: null
+      labels:
+        app: ezstore-product-db
+    spec:
+      containers:
+      - image: ezstoremicroservices/ezstore.product.db
+        name: ezstore-product-db
+        ports:
+        - containerPort: 3306
+          name: mysql
+        resources: {}
+      - args:
+        - proxy
+        - sidecar
+        - --configPath
+        - /etc/istio/proxy
+        - --binaryPath
+        - /usr/local/bin/envoy
+        - --serviceCluster
+        - ezstore-product-db
+        - --drainDuration
+        - 45s
+        - --parentShutdownDuration
+        - 1m0s
+        - --discoveryAddress
+        - istio-pilot.istio-system:15005
+        - --discoveryRefreshDelay
+        - 1s
+        - --zipkinAddress
+        - zipkin.istio-system:9411
+        - --connectTimeout
+        - 10s
+        - --proxyAdminPort
+        - "15000"
+        - --controlPlaneAuthPolicy
+        - MUTUAL_TLS
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: INSTANCE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: ISTIO_META_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: ISTIO_META_INTERCEPTION_MODE
+          value: REDIRECT
+        - name: ISTIO_METAJSON_LABELS
+          value: |
+            {"app":"ezstore-product-db"}
+        image: docker.io/istio/proxyv2:1.0.6
+        imagePullPolicy: IfNotPresent
+        name: istio-proxy
+        ports:
+        - containerPort: 15090
+          name: http-envoy-prom
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 10m
+        securityContext:
+          readOnlyRootFilesystem: true
+          runAsUser: 1337
+        volumeMounts:
+        - mountPath: /etc/istio/proxy
+          name: istio-envoy
+        - mountPath: /etc/certs/
+          name: istio-certs
+          readOnly: true
+      initContainers:
+      - args:
+        - -p
+        - "15001"
+        - -u
+        - "1337"
+        - -m
+        - REDIRECT
+        - -i
+        - '*'
+        - -x
+        - ""
+        - -b
+        - "3306"
+        - -d
+        - ""
+        image: docker.io/istio/proxy_init:1.0.6
+        imagePullPolicy: IfNotPresent
+        name: istio-init
+        resources: {}
+        securityContext:
+          capabilities:
+            add:
+            - NET_ADMIN
+          privileged: true
+      volumes:
+      - emptyDir:
+          medium: Memory
+        name: istio-envoy
+      - name: istio-certs
+        secret:
+          optional: true
+          secretName: istio.default
+status: {}
+---
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ezstore-warehouse-db
+spec:
+  type: ClusterIP
+  ports:
+  - name: mysql
+    protocol: TCP
+    port: 3306
+    targetPort: 3306
+  selector:
+    app: ezstore-warehouse-db
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  name: ezstore-warehouse-db
+spec:
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      app: ezstore-warehouse-db
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/status: '{"version":"887285bb7fa76191bf7f637f283183f0ba057323b078d44c3db45978346cbc1a","initContainers":["istio-init"],"containers":["istio-proxy"],"volumes":["istio-envoy","istio-certs"],"imagePullSecrets":null}'
+      creationTimestamp: null
+      labels:
+        app: ezstore-warehouse-db
+    spec:
+      containers:
+      - image: ezstoremicroservices/ezstore.warehouse.db
+        name: ezstore-warehouse-db
+        ports:
+        - containerPort: 3306
+          name: mysql
+        resources: {}
+      - args:
+        - proxy
+        - sidecar
+        - --configPath
+        - /etc/istio/proxy
+        - --binaryPath
+        - /usr/local/bin/envoy
+        - --serviceCluster
+        - ezstore-warehouse-db
+        - --drainDuration
+        - 45s
+        - --parentShutdownDuration
+        - 1m0s
+        - --discoveryAddress
+        - istio-pilot.istio-system:15005
+        - --discoveryRefreshDelay
+        - 1s
+        - --zipkinAddress
+        - zipkin.istio-system:9411
+        - --connectTimeout
+        - 10s
+        - --proxyAdminPort
+        - "15000"
+        - --controlPlaneAuthPolicy
+        - MUTUAL_TLS
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: INSTANCE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: ISTIO_META_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: ISTIO_META_INTERCEPTION_MODE
+          value: REDIRECT
+        - name: ISTIO_METAJSON_LABELS
+          value: |
+            {"app":"ezstore-warehouse-db"}
+        image: docker.io/istio/proxyv2:1.0.6
+        imagePullPolicy: IfNotPresent
+        name: istio-proxy
+        ports:
+        - containerPort: 15090
+          name: http-envoy-prom
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 10m
+        securityContext:
+          readOnlyRootFilesystem: true
+          runAsUser: 1337
+        volumeMounts:
+        - mountPath: /etc/istio/proxy
+          name: istio-envoy
+        - mountPath: /etc/certs/
+          name: istio-certs
+          readOnly: true
+      initContainers:
+      - args:
+        - -p
+        - "15001"
+        - -u
+        - "1337"
+        - -m
+        - REDIRECT
+        - -i
+        - '*'
+        - -x
+        - ""
+        - -b
+        - "3306"
+        - -d
+        - ""
+        image: docker.io/istio/proxy_init:1.0.6
+        imagePullPolicy: IfNotPresent
+        name: istio-init
+        resources: {}
+        securityContext:
+          capabilities:
+            add:
+            - NET_ADMIN
+          privileged: true
+      volumes:
+      - emptyDir:
+          medium: Memory
+        name: istio-envoy
+      - name: istio-certs
+        secret:
+          optional: true
+          secretName: istio.default
+status: {}
 ---

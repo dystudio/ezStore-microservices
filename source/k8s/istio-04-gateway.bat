@@ -1,1 +1,0 @@
-kubectl apply -f k8s\istio-gateway.yaml
